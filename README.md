@@ -4,7 +4,7 @@
 
 - Setup virtual environment (see guides below)
 - Upgrade pip to latest version: python -m pip install --upgrade pip
-- Install requirements: pip install -r requirements.txt
+- Install requirements: pip install -r dev_requirements.txt
 - Develop package: python setup.py develop
 #### Guide - virtual environment on Windows
 - "C:\Program Files\Python311\python.exe" -m venv .venv
