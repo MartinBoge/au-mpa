@@ -13,4 +13,4 @@
 
 #### Guide - virtual environment on Mac
 - python3.11 -m venv .venv
-- source .venv\Scripts\activate
+- source .venv/bin/activate
