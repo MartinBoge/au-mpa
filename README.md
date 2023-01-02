@@ -1,4 +1,4 @@
-# project_name
+# Regarding the AU course 'Modellering inden for prescreptive analytics'
 
 ## Development requirements
 
