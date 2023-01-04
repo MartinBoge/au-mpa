@@ -28,10 +28,11 @@ jobs:
       run: black --check .
 
     - name: Check code linting
-      run: flake8 . --ignore=W503,E266,E501
+      run: flake8 . --ignore=W503,E266,E501,E741
       # w503: linebreak before binary operator before
       # E266: too many leading '#' for block comment
       # E501: line too long
+      # E741: ambiguous variable names
 
     - name: Install the package
       run: pip install .
