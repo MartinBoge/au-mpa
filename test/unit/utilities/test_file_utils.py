@@ -7,7 +7,7 @@ from mpa.utilities.file_utils import read_json, write_json
 class TestFileUtils(unittest.TestCase):
     def __init__(self, methodName: str = ...) -> None:
         super().__init__(methodName)
-        self.test_file_path_json = "tests/unit_tests/utilities/test_file.json"
+        self.test_file_path_json = "test/unit/utilities/test_file.json"
 
     def setUp(self) -> None:
         check_and_remove_file(self.test_file_path_json)
