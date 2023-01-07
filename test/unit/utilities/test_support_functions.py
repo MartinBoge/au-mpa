@@ -8,7 +8,7 @@ class TestFileUtils(unittest.TestCase):
 
         # Test for n = 3
         subset_n_3 = create_subsets(3)
-        self.assertEqual(subset_n_3, [[0, 1], [0, 2], [1, 2]])
+        self.assertEqual(subset_n_3, [[1, 2], [1, 3], [2, 3]])
         self.assertEqual(len(subset_n_3), 3)
 
         # Test for n = 4
@@ -17,16 +17,16 @@ class TestFileUtils(unittest.TestCase):
         self.assertEqual(
             subset_n_4,
             [
-                [0, 1],
-                [0, 2],
                 [1, 2],
-                [0, 1, 2],
-                [0, 3],
                 [1, 3],
-                [0, 1, 3],
                 [2, 3],
-                [0, 2, 3],
                 [1, 2, 3],
+                [1, 4],
+                [2, 4],
+                [1, 2, 4],
+                [3, 4],
+                [1, 3, 4],
+                [2, 3, 4],
             ],
         )
         self.assertEqual(len(subset_n_4), 10)

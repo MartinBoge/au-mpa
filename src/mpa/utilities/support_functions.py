@@ -64,14 +64,14 @@ def create_subsets(n: int) -> list:
     Create a list of all subsets given a number of customers
 
     Parameters:
-    n (int): The number of customers.
+    n (int): The number of customers. (The storage is not counted as it is considered to be 0)
 
     Returns:
     list: A list of all subsets.
     """
-    s = list(range(0, n))
+    s = list(range(1, n + 1))
     all_subsets = []
-    for i in range(0, 2**n):
+    for i in range(1, 2**n + 1):
         nextList = [s[j] for j in range(n) if (i & (1 << j))]
         nextListLength = len(nextList)
         if 2 <= nextListLength <= n - 1:
