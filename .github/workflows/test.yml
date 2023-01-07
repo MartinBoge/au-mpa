@@ -22,7 +22,7 @@ jobs:
       run: python -m pip install --upgrade pip
 
     - name: Install test requirements
-      run: python -m pip install -r tests/test_requirements.txt
+      run: python -m pip install -r test/test_requirements.txt
 
     - name: Check code formatting
       run: black --check .

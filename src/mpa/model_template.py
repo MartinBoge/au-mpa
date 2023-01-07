@@ -7,8 +7,6 @@ def read_data(path: str) -> dict:
 
     data = read_json(path)
 
-    ...
-
     return data
 
 
