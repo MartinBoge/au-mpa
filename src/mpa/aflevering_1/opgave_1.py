@@ -1,6 +1,8 @@
-from mpa.utilities.distance_matrix_calc import make_lp_morm_distance_matrix
 from mpa.utilities.file_utils import read_json
-from mpa.utilities.support_functions import extract_key_names
+from mpa.utilities.support_functions import (
+    extract_key_names,
+    make_lp_morm_distance_matrix,
+)
 
 
 def main():
