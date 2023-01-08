@@ -140,8 +140,8 @@ def main():
     data = read_data("src/mpa/ruteplanlægning/7_2_0_TSP_DFJ_data.json")
     model = build_model(data)
     solve_model(model)
-    display_solution(model, data)
-    # display_solution_simple(model)
+    # display_solution(model, data)
+    display_solution_simple(model)
 
 
 if __name__ == "__main__":
