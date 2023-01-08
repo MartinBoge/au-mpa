@@ -2,14 +2,11 @@ import matplotlib.pyplot as plt
 import pyomo.environ as pyomo
 
 from mpa.utilities.file_utils import read_json
-from mpa.utilities.support_functions import create_subsets
 
 
 def read_data(path: str) -> dict:
 
     data = read_json(path)
-
-    data["all_subsets"] = create_subsets(data["n"])
 
     return data
 
@@ -20,6 +17,11 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
     model = pyomo.ConcreteModel()
 
     # Add data
+    model.n = data["n"]
+    model.customers = range(
+        1, model.n + 1
+    )  # Implicitly implies that the storage is node 0
+
     model.nodes = range(0, data["n"] + 1)
     model.dist = data["dist"]
 
@@ -27,6 +29,10 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
     model.x = pyomo.Var(model.nodes, model.nodes, within=pyomo.Binary)
     for i in model.nodes:
         model.x[i, i].fix(0)
+
+    model.u = pyomo.Var(
+        model.customers, within=pyomo.NonNegativeReals, bounds=(1, model.n)
+    )
 
     # Define objective function
     model.obj = pyomo.Objective(
@@ -41,19 +47,27 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
     model.sum_to_one = pyomo.ConstraintList()
     # In to node j
     for j in model.nodes:
-        model.sum_to_one.add(expr=sum(model.x[i, j] for i in model.nodes) == 1)
+        model.sum_to_one.add(
+            expr=sum(model.x[i, j] for i in model.nodes if i != j) == 1
+        )
     # Out of node i
     for i in model.nodes:
         model.sum_to_one.add(
             expr=sum(model.x[i, j] for j in model.nodes if i != j) == 1
         )
 
-    # Constraint: Add all the sub-tour elimination constraints
-    model.SECs = pyomo.ConstraintList()
-    for set in data["all_subsets"]:
-        model.SECs.add(
-            expr=sum(model.x[i, j] for i in set for j in set if i != j) <= len(set) - 1
-        )
+    # Constraints: Add all the sub-tour elimination constraints
+    model.mtz_order = pyomo.ConstraintList()
+    for i in model.customers:
+        model.mtz_order.add(expr=1 <= model.u[i])
+        model.mtz_order.add(expr=model.u[i] <= model.n)
+
+    model.mtz_complete = pyomo.ConstraintList()
+    for i in model.customers:
+        for j in model.customers:
+            model.mtz_complete.add(
+                expr=model.u[i] - model.u[j] + model.n * model.x[i, j] <= model.n - 1
+            )
 
     return model
 

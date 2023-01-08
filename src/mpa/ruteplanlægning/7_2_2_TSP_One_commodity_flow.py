@@ -2,14 +2,11 @@ import matplotlib.pyplot as plt
 import pyomo.environ as pyomo
 
 from mpa.utilities.file_utils import read_json
-from mpa.utilities.support_functions import create_subsets
 
 
 def read_data(path: str) -> dict:
 
     data = read_json(path)
-
-    data["all_subsets"] = create_subsets(data["n"])
 
     return data
 
@@ -20,6 +17,8 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
     model = pyomo.ConcreteModel()
 
     # Add data
+    model.n = data["n"]
+    model.customers = range(1, data["n"] + 1)
     model.nodes = range(0, data["n"] + 1)
     model.dist = data["dist"]
 
@@ -27,6 +26,8 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
     model.x = pyomo.Var(model.nodes, model.nodes, within=pyomo.Binary)
     for i in model.nodes:
         model.x[i, i].fix(0)
+
+    model.f = pyomo.Var(model.nodes, model.nodes, within=pyomo.NonNegativeReals)
 
     # Define objective function
     model.obj = pyomo.Objective(
@@ -48,11 +49,24 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
             expr=sum(model.x[i, j] for j in model.nodes if i != j) == 1
         )
 
-    # Constraint: Add all the sub-tour elimination constraints
-    model.SECs = pyomo.ConstraintList()
-    for set in data["all_subsets"]:
-        model.SECs.add(
-            expr=sum(model.x[i, j] for i in set for j in set if i != j) <= len(set) - 1
+    # Constraint: no node/vertex can be visited after number
+    model.no_after_n = pyomo.ConstraintList()
+    for i in model.nodes:
+        for j in model.nodes:
+            model.no_after_n.add(expr=model.f[i, j] <= model.n)
+
+    # Constraint: big-m
+    model.big_m = pyomo.ConstraintList()
+    for i in model.nodes:
+        for j in model.nodes:
+            model.big_m.add(expr=model.f[i, j] <= model.n * model.x[i, j])
+
+    # Constraint: in of node i is before out of note i
+    model.in_before_out = pyomo.ConstraintList()
+    for i in model.customers:
+        model.in_before_out.add(
+            expr=sum(model.f[i, j] for j in model.nodes)
+            == sum(model.f[j, i] for j in model.nodes) + 1
         )
 
     return model
