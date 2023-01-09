@@ -120,13 +120,13 @@ def main(filename: str, numScenarios: int):
         print("objective value: ", objVals[-1], "\tSolution time:", compTimes[-1])
     plt.plot(sshs, objVals, "-o")
     plt.savefig(
-        "src/mpa/stokastisk_optimering/chance_constrained/chance_constraints_value_single.eps",
+        "src/mpa/stokastisk_optimering/chance_constrained/single/chance_constraints_value_single.eps",
         bbox_inches="tight",
     )
     plt.clf()
     plt.plot(sshs, compTimes, "-o")
     plt.savefig(
-        "src/mpa/stokastisk_optimering/chance_constrained/chance_constraints_time_single.eps",
+        "src/mpa/stokastisk_optimering/chance_constrained/single/chance_constraints_time_single.eps",
         bbox_inches="tight",
     )
 
