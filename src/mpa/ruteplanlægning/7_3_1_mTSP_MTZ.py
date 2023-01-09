@@ -102,12 +102,12 @@ def display_solution(model: pyomo.ConcreteModel(), data: dict):
 
     # Find a tour for each vehicle
     last_route_starter = 0
-    coordinates_present = "x_cord" in data and "y_cord" in data
+    coordinates_present = "x_coord" in data and "y_coord" in data
     for vehicle in range(1, model.m + 1):
 
         if coordinates_present:
-            display_x = [data["x_cord"][0]]
-            display_y = [data["y_cord"][0]]
+            display_x = [data["x_coord"][0]]
+            display_y = [data["y_coord"][0]]
             labels = [0]
 
         # Find the customer, that starts the next route
@@ -117,8 +117,8 @@ def display_solution(model: pyomo.ConcreteModel(), data: dict):
                 current_node, last_route_starter = j, j
 
                 if coordinates_present:
-                    display_x.append(data["x_cord"][current_node])
-                    display_y.append(data["y_cord"][current_node])
+                    display_x.append(data["x_coord"][current_node])
+                    display_y.append(data["y_coord"][current_node])
                     labels.append(current_node)
 
                 break
@@ -136,8 +136,8 @@ def display_solution(model: pyomo.ConcreteModel(), data: dict):
                     print(f" -> {j}", end="")
                     current_node = j
                     if coordinates_present:
-                        display_x.append(data["x_cord"][current_node])
-                        display_y.append(data["y_cord"][current_node])
+                        display_x.append(data["x_coord"][current_node])
+                        display_y.append(data["y_coord"][current_node])
                         labels.append(current_node)
                     break
 

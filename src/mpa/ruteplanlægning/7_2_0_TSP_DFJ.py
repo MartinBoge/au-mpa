@@ -77,10 +77,10 @@ def display_solution(model: pyomo.ConcreteModel(), data: dict):
     counter = 0
 
     # Flag for testing if coordinates are present in the data
-    coordinates_present = "x_cord" in data and "y_cord" in data
+    coordinates_present = "x_coord" in data and "y_coord" in data
     if coordinates_present:
-        display_x = [data["x_cord"][0]]
-        display_y = [data["y_cord"][0]]
+        display_x = [data["x_coord"][0]]
+        display_y = [data["y_coord"][0]]
         labels = [0]
 
     # Find the route from the x[i,j] values
@@ -90,8 +90,8 @@ def display_solution(model: pyomo.ConcreteModel(), data: dict):
         for i in model.nodes:
             if i != current_node and pyomo.value(model.x[current_node, i]) == 1:
                 if coordinates_present:
-                    display_x.append(data["x_cord"][i])
-                    display_y.append(data["y_cord"][i])
+                    display_x.append(data["x_coord"][i])
+                    display_y.append(data["y_coord"][i])
                 if i > 0:
                     print(f"{i} -> ", end="")
                     if coordinates_present:

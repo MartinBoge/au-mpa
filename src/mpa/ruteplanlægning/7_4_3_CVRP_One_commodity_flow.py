@@ -23,7 +23,8 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
     model.dist = data["dist"]
 
     model.m = data["m"]
-    model.S = data["S"]
+    model.q = data["q"]
+    model.Q = data["Q"]
 
     # Define variables
     model.x = pyomo.Var(model.nodes, model.nodes, within=pyomo.Binary)
@@ -62,18 +63,23 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
         expr=sum(model.x[i, 0] for i in model.nodes) == model.m
     )
 
-    # Constraint: big-m
-    model.big_m = pyomo.ConstraintList()
+    # Constraints: no sub routes and capacity is respected
+    model.generalized_bounds = pyomo.ConstraintList()
     for i in model.nodes:
         for j in model.nodes:
-            model.big_m.add(expr=model.f[i, j] <= model.S * model.x[i, j])
+            model.generalized_bounds.add(
+                expr=model.f[i, j] >= model.q[i] * model.x[i, j]
+            )
+            model.generalized_bounds.add(
+                expr=model.f[i, j] <= (model.Q - model.q[j]) * model.x[i, j]
+            )
 
-    # Constraint: in of node i is before out of note i
-    model.in_before_out = pyomo.ConstraintList()
+    # Constraint: flow conservation
+    model.flow_conservation = pyomo.ConstraintList()
     for i in model.customers:
-        model.in_before_out.add(
+        model.flow_conservation.add(
             expr=sum(model.f[i, j] for j in model.nodes)
-            == sum(model.f[j, i] for j in model.nodes) + 1
+            == sum(model.f[j, i] for j in model.nodes) + model.q[i]
         )
 
     return model
@@ -82,6 +88,7 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
 def solve_model(model: pyomo.ConcreteModel()):
 
     solver = pyomo.SolverFactory("gurobi")
+    solver.options["timelimit"] = 60 * 0.1  # seconds
 
     solver.solve(model, tee=True)
 
@@ -180,7 +187,7 @@ def display_solution_simple(model: pyomo.ConcreteModel()):
 
 
 def main():
-    data = read_data("src/mpa/ruteplanlægning/7_3_small_data.json")
+    data = read_data("src/mpa/ruteplanlægning/7_4_CVRP_n_29_data.json")
     model = build_model(data)
     solve_model(model)
     # display_solution(model, data)

@@ -18,24 +18,31 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
 
     # Add data
     model.n = data["n"]
-    model.customers = range(1, data["n"] + 1)
+    model.customers = range(
+        1, model.n + 1
+    )  # Implicitly implies that the storage is node 0
+
     model.nodes = range(0, data["n"] + 1)
     model.dist = data["dist"]
 
     model.m = data["m"]
-    model.S = data["S"]
+
+    model.q = data["q"]
+    model.Q = data["Q"]
 
     # Define variables
     model.x = pyomo.Var(model.nodes, model.nodes, within=pyomo.Binary)
     for i in model.nodes:
         model.x[i, i].fix(0)
 
-    model.f = pyomo.Var(model.nodes, model.nodes, within=pyomo.NonNegativeReals)
+    model.v = pyomo.Var(
+        model.customers, within=pyomo.NonNegativeReals, bounds=(0, model.Q)
+    )
 
     # Define objective function
     model.obj = pyomo.Objective(
         expr=sum(
-            sum(model.dist[i][j] * model.x[i, j] for j in model.nodes)
+            sum(model.dist[i][j] * model.x[i, j] for j in model.nodes if i != j)
             for i in model.nodes
         ),
         sense=pyomo.minimize,
@@ -62,19 +69,20 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
         expr=sum(model.x[i, 0] for i in model.nodes) == model.m
     )
 
-    # Constraint: big-m
-    model.big_m = pyomo.ConstraintList()
-    for i in model.nodes:
-        for j in model.nodes:
-            model.big_m.add(expr=model.f[i, j] <= model.S * model.x[i, j])
-
-    # Constraint: in of node i is before out of note i
-    model.in_before_out = pyomo.ConstraintList()
+    # Constraint: no sub routes (note that it model.v has been bound from 0 to Q)
+    model.no_sub_routes = pyomo.ConstraintList()
     for i in model.customers:
-        model.in_before_out.add(
-            expr=sum(model.f[i, j] for j in model.nodes)
-            == sum(model.f[j, i] for j in model.nodes) + 1
-        )
+        model.no_sub_routes.add(expr=model.q[i] <= model.v[i])
+
+    # Constraint: the capacity is not exceeded
+    model.capacity = pyomo.ConstraintList()
+    for i in model.customers:
+        for j in model.customers:
+            if i != j:
+                model.capacity.add(
+                    expr=model.v[i] - model.v[j] + model.Q * model.x[i, j]
+                    <= model.Q - model.q[j]
+                )
 
     return model
 
@@ -82,6 +90,7 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
 def solve_model(model: pyomo.ConcreteModel()):
 
     solver = pyomo.SolverFactory("gurobi")
+    solver.options["timelimit"] = 60 * 3
 
     solver.solve(model, tee=True)
 
@@ -180,7 +189,7 @@ def display_solution_simple(model: pyomo.ConcreteModel()):
 
 
 def main():
-    data = read_data("src/mpa/ruteplanlægning/7_3_small_data.json")
+    data = read_data("src/mpa/ruteplanlægning/7_4_CVRP_n_29_data.json")
     model = build_model(data)
     solve_model(model)
     # display_solution(model, data)
