@@ -3,7 +3,7 @@ import unittest
 from mpa.utilities.support_functions import create_subsets
 
 
-class TestFileUtils(unittest.TestCase):
+class TestSupportFunctions(unittest.TestCase):
     def test_create_subsets(self):
 
         # Test for n = 3
