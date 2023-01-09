@@ -1,10 +1,10 @@
 import pyomo.environ as pyomo
 
+from mpa.utilities.model_utils import solve_model
+
 
 def read_data() -> dict:
-
     data = {}
-
     return data
 
 
@@ -28,15 +28,7 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
     return model
 
 
-def solve_model(model: pyomo.ConcreteModel()):
-
-    solver = pyomo.SolverFactory("gurobi")
-
-    solver.solve(model, tee=True)
-
-
 def display_solution(model: pyomo.ConcreteModel()):
-
     print("Optimal objection function value =", pyomo.value(model.obj))
 
     ...

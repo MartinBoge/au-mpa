@@ -85,10 +85,17 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
     return model
 
 
-def solve_model(model: pyomo.ConcreteModel()):
+def solve_model(
+    model: pyomo.ConcreteModel(), timelimit: float = None, gap: float = None
+):
 
     solver = pyomo.SolverFactory("gurobi")
-    solver.options["timelimit"] = 60 * 0.1  # seconds
+
+    if timelimit:
+        solver.options["timelimit"] = timelimit  # seconds
+
+    if gap:
+        solver.options["mipgap"] = gap
 
     solver.solve(model, tee=True)
 
@@ -189,7 +196,7 @@ def display_solution_simple(model: pyomo.ConcreteModel()):
 def main():
     data = read_data("src/mpa/ruteplanlægning/7_4_CVRP_n_29_data.json")
     model = build_model(data)
-    solve_model(model)
+    solve_model(model, timelimit=60 * 5, gap=0.10)
     # display_solution(model, data)
     display_solution_simple(model)
 
