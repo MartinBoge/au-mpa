@@ -29,7 +29,7 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
     return model
 
 
-def display_solution(model: pyomo.ConcreteModel()):
+def display_solution(model: pyomo.ConcreteModel(), data: dict):
 
     print("Optimal objection function value =", pyomo.value(model.obj))
 
@@ -40,7 +40,7 @@ def main():
     data = read_data("path_to_data")
     model = build_model(data)
     solve_model(model)
-    display_solution(model)
+    display_solution(model, data)
 
 
 if __name__ == "__main__":
