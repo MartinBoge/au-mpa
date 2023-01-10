@@ -28,10 +28,10 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
     return model
 
 
-def display_solution(model: pyomo.ConcreteModel(), data: dict):
-    print("Optimal objection function value =", pyomo.value(model.obj))
+def display_solution(model: pyomo.ConcreteModel(), data: dict, r: int = 2):
 
-    ...
+    ofc = round(pyomo.value(model.obj), r)
+    print(f"\nOptimal objection function value = {ofc}")
 
 
 def main():
