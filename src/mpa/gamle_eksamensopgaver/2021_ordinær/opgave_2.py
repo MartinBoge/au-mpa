@@ -43,13 +43,22 @@ def display_solution(model: pyomo.ConcreteModel(), r: int = 2):
     ofc = round(pyomo.value(model.obj), r)
     print(f"\nOptimal objection function value = {ofc}")
 
+    placerede_testcentre = [i for i in model.I if model.y[i].value == 1]
+    print(f"Der skal placeres  {len(placerede_testcentre)} lokationer alt.")
+    print("Disse skal placeres ved lokation i =")
+    for index, testcenter in enumerate(placerede_testcentre):
+        if index == len(placerede_testcentre) - 1:
+            print(f"{testcenter}")
+        else:
+            print(f"{testcenter}, ", end="")
+
 
 def display_solution_graf(model: pyomo.ConcreteModel(), data: dict):
 
     placerede_testcentre = [data["I"][i] for i in model.I if model.y[i].value == 1]
 
     print(
-        f"\nDer er placeret {len(placerede_testcentre)} testcentre i følgende koordinater:"
+        f"\nDe {len(placerede_testcentre)} testcentre skal placeres på følgende koordinater:"
     )
     for testcenter in placerede_testcentre:
         print(f"    {testcenter}")
