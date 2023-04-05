@@ -5,14 +5,12 @@ from mpa.utilities.file_utils import read_json
 
 
 def read_data(path: str) -> dict:
-
     data = read_json(path)
 
     return data
 
 
 def build_model(data: dict) -> pyomo.ConcreteModel():
-
     # Instantiate model
     model = pyomo.ConcreteModel()
 
@@ -88,7 +86,6 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
 
 
 def solve_model(model: pyomo.ConcreteModel()):
-
     solver = pyomo.SolverFactory("gurobi")
     solver.options["timelimit"] = 60 * 3
 
@@ -96,7 +93,6 @@ def solve_model(model: pyomo.ConcreteModel()):
 
 
 def display_solution(model: pyomo.ConcreteModel(), data: dict):
-
     # Print total length of tours
     print("Total length of tours:", pyomo.value(model.obj))
 
@@ -104,7 +100,6 @@ def display_solution(model: pyomo.ConcreteModel(), data: dict):
     last_route_starter = 0
     coordinates_present = "x_coord" in data and "y_coord" in data
     for vehicle in range(1, model.m + 1):
-
         if coordinates_present:
             display_x = [data["x_coord"][0]]
             display_y = [data["y_coord"][0]]
@@ -152,7 +147,6 @@ def display_solution(model: pyomo.ConcreteModel(), data: dict):
 
 
 def display_solution_simple(model: pyomo.ConcreteModel()):
-
     optimal_cost = round(pyomo.value(model.obj), 4)
 
     print(f"Optimal objection function value = {optimal_cost:,}")
@@ -160,7 +154,6 @@ def display_solution_simple(model: pyomo.ConcreteModel()):
     last_route_starter = 0
 
     for vehicle in range(1, model.m + 1):
-
         print(f"The route for vehicle {vehicle} is:")
         current_node = 0
 

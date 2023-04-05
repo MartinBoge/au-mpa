@@ -4,7 +4,6 @@ import pyomo.environ as pyomo
 
 
 def read_data() -> dict:
-
     data = {
         "products": ["Letmaelk", "Skummetmaelk"],
         "periods": [
@@ -41,7 +40,6 @@ def read_data() -> dict:
 
 
 def build_model(data: dict) -> pyomo.ConcreteModel():
-
     # Instantiate model
     model = pyomo.ConcreteModel()
 
@@ -121,14 +119,12 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
 
 
 def solve_model(model: pyomo.ConcreteModel()):
-
     solver = pyomo.SolverFactory("gurobi")
 
     solver.solve(model, tee=True)
 
 
 def display_solution(model: pyomo.ConcreteModel()):
-
     optimal_cost = round(pyomo.value(model.obj), 2)
 
     print(f"Optimal objection function value = {optimal_cost:,}")
@@ -173,7 +169,6 @@ def display_solution(model: pyomo.ConcreteModel()):
 
     # Creating individual product plots ###############################################
     for k in model.k:
-
         plt.subplot(
             number_of_plots, number_of_columns, k + 2
         )  # Starting by plotting the second plot (first k == 0)

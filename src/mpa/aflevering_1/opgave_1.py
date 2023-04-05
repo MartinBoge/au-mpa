@@ -6,7 +6,6 @@ from mpa.utilities.support_functions import (
 
 
 def main():
-
     data = read_json(path="src/mpa/aflevering_1/USArrests.json")
 
     print("Keys in data as read from file: ", extract_key_names(data))

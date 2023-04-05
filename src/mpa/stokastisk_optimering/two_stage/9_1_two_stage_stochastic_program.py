@@ -29,7 +29,6 @@ def generate_scenarios(data: dict, numScenarios) -> list:
 
 
 def read_data(filename: str, numScenarios) -> dict:
-
     data = read_json(filename)
     data["demand_scenario"] = generate_scenarios(data, numScenarios)
     return data

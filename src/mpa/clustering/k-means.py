@@ -5,7 +5,6 @@ from mpa.utilities.file_utils import read_json
 
 
 def main():
-
     k = 3
 
     # Read data

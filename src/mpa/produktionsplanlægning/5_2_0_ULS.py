@@ -4,7 +4,6 @@ import pyomo.environ as pyomo
 
 
 def read_data() -> dict:
-
     data = {
         "periods": [
             "week1",
@@ -52,7 +51,6 @@ def read_data() -> dict:
 
 
 def build_model(data: dict) -> pyomo.ConcreteModel():
-
     # Instantiate model
     model = pyomo.ConcreteModel()
 
@@ -113,14 +111,12 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
 
 
 def solve_model(model: pyomo.ConcreteModel()):
-
     solver = pyomo.SolverFactory("gurobi")
 
     solver.solve(model, tee=True)
 
 
 def display_solution(model: pyomo.ConcreteModel()):
-
     optimal_cost = round(pyomo.value(model.obj), 2)
 
     print(f"Optimal objection function value = {optimal_cost:,}")

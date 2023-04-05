@@ -5,14 +5,12 @@ from mpa.utilities.file_utils import read_json
 
 
 def read_data(path: str) -> dict:
-
     data = read_json(path)
 
     return data
 
 
 def build_model(data: dict) -> pyomo.ConcreteModel():
-
     # Instantiate model
     model = pyomo.ConcreteModel()
 
@@ -73,14 +71,12 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
 
 
 def solve_model(model: pyomo.ConcreteModel()):
-
     solver = pyomo.SolverFactory("gurobi")
 
     solver.solve(model, tee=True)
 
 
 def display_solution(model: pyomo.ConcreteModel(), data: dict):
-
     optimal_cost = round(pyomo.value(model.obj), 4)
 
     print(f"Optimal objection function value = {optimal_cost:,}")
@@ -127,7 +123,6 @@ def display_solution(model: pyomo.ConcreteModel(), data: dict):
 
 
 def display_solution_simple(model: pyomo.ConcreteModel()):
-
     optimal_cost = round(pyomo.value(model.obj), 4)
 
     print(f"Optimal objection function value = {optimal_cost:,}")

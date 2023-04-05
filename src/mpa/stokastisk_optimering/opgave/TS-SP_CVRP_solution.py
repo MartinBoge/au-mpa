@@ -28,7 +28,6 @@ from mpa.utilities.support_functions import make_lp_morm_distance_matrix
 
 
 def read_data(filename: str) -> dict:
-
     data = read_json(filename)
 
     data["dist"] = make_lp_morm_distance_matrix(
@@ -115,7 +114,6 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
     for s in model.scenarios:
         for i in model.nodes:
             for j in model.nodes:
-
                 model.GUB.add(
                     expr=model.f[i, j, s]
                     <= (model.Q - model.q[s][j]) * model.x[i, j, s]

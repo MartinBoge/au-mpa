@@ -2,7 +2,6 @@ import pyomo.environ as pyomo
 
 
 def read_data() -> dict:
-
     data = {
         "I": ["Fabrik 1", "Fabrik 2", "Fabrik 3", "Fabrik 4", "Fabrik 5"],
         "J": ["Kunde 1", "Kunde 2", "Kunde 3"],
@@ -28,7 +27,6 @@ def read_data() -> dict:
 
 
 def build_model(data: dict) -> pyomo.ConcreteModel():
-
     # Instantiate model
     model = pyomo.ConcreteModel()
 
@@ -83,14 +81,12 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
 
 
 def solve_model(model: pyomo.ConcreteModel()):
-
     solver = pyomo.SolverFactory("gurobi")
 
     solver.solve(model, tee=True)
 
 
 def display_solution(model: pyomo.ConcreteModel()):
-
     print("Optimal objection function value =", pyomo.value(model.obj))
 
     for i in model.i:

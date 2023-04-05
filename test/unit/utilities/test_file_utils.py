@@ -17,7 +17,6 @@ class TestFileUtils(unittest.TestCase):
 
     # writing and reading the same dict
     def test_read_and_write_json(self):
-
         write_data = {"x": [1, 2, 3], "y": [4, 5, 6]}
 
         write_json(obj=write_data, path=self.test_file_path_json)

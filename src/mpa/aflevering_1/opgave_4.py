@@ -5,7 +5,6 @@ from mpa.utilities.support_functions import make_lp_morm_distance_matrix
 
 
 def read_data(path: str) -> dict:
-
     data = read_json(path)
 
     euclidian_dist_matrix = make_lp_morm_distance_matrix(
@@ -20,7 +19,6 @@ def read_data(path: str) -> dict:
 
 
 def build_model(data: dict, k: int) -> pyomo.ConcreteModel():
-
     # Instantiate model
     model = pyomo.ConcreteModel()
 
@@ -76,14 +74,12 @@ def build_model(data: dict, k: int) -> pyomo.ConcreteModel():
 
 
 def solve_model(model: pyomo.ConcreteModel()):
-
     solver = pyomo.SolverFactory("gurobi")
 
     solver.solve(model, tee=True)
 
 
 def display_solution(model: pyomo.ConcreteModel()):
-
     print("Optimal objection function value =", pyomo.value(model.obj))
 
     for n in range(0, model.n):

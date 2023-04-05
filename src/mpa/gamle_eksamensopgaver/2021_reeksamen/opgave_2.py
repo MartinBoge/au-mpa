@@ -10,7 +10,6 @@ def read_data(path: str) -> dict:
 
 
 def build_model(data: dict) -> pyomo.ConcreteModel():
-
     # Instantiate model
     model = pyomo.ConcreteModel()
 
@@ -57,7 +56,6 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
 
 
 def display_solution(model: pyomo.ConcreteModel(), data: dict):
-
     print("Optimal objection function value =", pyomo.value(model.obj))
 
     clusters = [[] for cluster in model.l]

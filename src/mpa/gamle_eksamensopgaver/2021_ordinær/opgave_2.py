@@ -12,7 +12,6 @@ def read_data(path: str) -> dict:
 
 
 def build_model(data: dict) -> pyomo.ConcreteModel():
-
     # Instantiate model
     model = pyomo.ConcreteModel()
 
@@ -39,7 +38,6 @@ def build_model(data: dict) -> pyomo.ConcreteModel():
 
 
 def display_solution(model: pyomo.ConcreteModel(), r: int = 2):
-
     ofc = round(pyomo.value(model.obj), r)
     print(f"\nOptimal objection function value = {ofc}")
 
@@ -54,7 +52,6 @@ def display_solution(model: pyomo.ConcreteModel(), r: int = 2):
 
 
 def display_solution_graf(model: pyomo.ConcreteModel(), data: dict):
-
     placerede_testcentre = [data["I"][i] for i in model.I if model.y[i].value == 1]
 
     print(

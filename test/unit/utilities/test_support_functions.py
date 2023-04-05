@@ -5,7 +5,6 @@ from mpa.utilities.support_functions import create_subsets
 
 class TestSupportFunctions(unittest.TestCase):
     def test_create_subsets(self):
-
         # Test for n = 3
         subset_n_3 = create_subsets(3)
         self.assertEqual(subset_n_3, [[1, 2], [1, 3], [2, 3]])
